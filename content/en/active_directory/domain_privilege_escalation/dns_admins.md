@@ -9,7 +9,7 @@ images: []
 menu: 
   active_directory:
     parent: "domain_privilege_escalation"
-weight: 40
+weight: 50
 toc: true
 ---
 
