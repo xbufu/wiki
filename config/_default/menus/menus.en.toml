@@ -1,12 +1,54 @@
 [[active_directory]]
-  name = "Main"
+  name = "General"
   weight = 10
-  identifier = "main"
-  url = "/active_directory/main/"
+  identifier = "general"
+  url = "/active_directory/general/"
+
+[[active_directory]]
+  name = "Domain Enumeration"
+  weight = 20
+  identifier = "domain_enumeration"
+  url = "/active_directory/domain_enumeration/"
+
+[[active_directory]]
+  name = "Domain PrivEsc"
+  weight = 30
+  identifier = "domain_privilege_escalation"
+  url = "/active_directory/domain_privilege_escalation/"
+
+[[active_directory]]
+  name = "Domain Persistence"
+  weight = 40
+  identifier = "domain_persistence"
+  url = "/active_directory/domain_persistence/"
+
+[[active_directory]]
+  name = "Lateral Movement"
+  weight = 50
+  identifier = "lateral_movement"
+  url = "/active_directory/lateral_movement/"
+
+[[active_directory]]
+  name = "Trust Attacks"
+  weight = 60
+  identifier = "trust_attacks"
+  url = "/active_directory/trust_attacks/"
+
+[[active_directory]]
+  name = "MITM & Relay Attacks"
+  weight = 70
+  identifier = "mitm_relay"
+  url = "/active_directory/mitm_relay/"
+
+[[active_directory]]
+  name = "Detection & Defense"
+  weight = 80
+  identifier = "detection_and_defense"
+  url = "/active_directory/detection_and_defense/"
 
 [[main]]
   name = "Active Directory"
-  url = "/active_directory/main/first/"
+  url = "/active_directory/general/general/"
   weight = 10
 
 [[main]]
