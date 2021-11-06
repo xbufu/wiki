@@ -22,4 +22,6 @@ I initially had some trouble setting up more than one `docs` section from the or
 
 ## Credits
 
-![Doks — Modern Documentation Theme](https://raw.githubusercontent.com/h-enk/doks)
+- [Doks — Modern Documentation Theme](https://raw.githubusercontent.com/h-enk/doks)
+- [HackTricks.xyz](https://book.hacktricks.xyz/)
+- [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
