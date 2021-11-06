@@ -1,19 +1,12 @@
-[[docs]]
-  name = "Prologue"
+[[active_directory]]
+  name = "Main"
   weight = 10
-  identifier = "prologue"
-  url = "/docs/prologue/"
-
-[[docs]]
-  name = "Help"
-  weight = 60
-  identifier = "help"
-  url = "/docs/help/"
+  identifier = "main"
+  url = "/active_directory/main/"
 
 [[main]]
-  name = "Docs"
-  url = "/docs/prologue/introduction/"
-# url = "/docs/1.0/prologue/introduction/"
+  name = "Active Directory"
+  url = "/active_directory/main/first/"
   weight = 10
 
 [[main]]

@@ -87,3 +87,7 @@ rel  = "sitemap"
   [[module.mounts]]
     source = "node_modules/mermaid"
     target = "assets/js/vendor/mermaid"
+
+# Search
+[params]
+mainSections = ['docs', 'active_directory']
