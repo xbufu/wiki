@@ -19,7 +19,7 @@ defaultMarkdownHandler = "goldmark"
   lineNoStart = 1
   lineNos = false
   lineNumbersInTable = true
-  noClasses = false
+  noClasses = true
   style = "dracula"
   tabWidth = 4
 
