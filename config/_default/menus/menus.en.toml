@@ -11,7 +11,7 @@
 
 [[main]]
   name = "Blog"
-  url = "/blog/"
+  url = "https://bufu-sec.com/"
   weight = 20
 
 [[social]]
