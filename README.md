@@ -1,10 +1,30 @@
+# Bufu-Sec Wiki
+
+The wiki will contain all my notes and cheatsheets mostly related to Red Teaming. It uses the popular [doks](https://github.com/h-enk/doks) theme.
+
+## Contributing
+
+Feel free to contribute by making a pull request. You can also just use this repo as a template to create your own wiki and host it on Github Pages.
+
+### Adding more Sections
+
+I initially had some trouble setting up more than one `docs` section from the original theme and getting the search to work, but here are some references to help get you set up:
+
+- [test-wiki commit 79c667f](https://github.com/xbufu/test-wiki/commit/8d4ff9b089a618e9319de1f3e986f87acd609417)
+- [Discussion #173: How to create a new docs-like directory and menu](https://github.com/h-enk/doks/discussions/173)
+- [Pull request by theme author: Update for second docs tree](https://github.com/atwriter/new_doks_site/pull/1/commits/40e6eae81a8748645525afadf21b1759ce5f2c77)
+- [Discussion #543: Search function not working in second docs page](https://github.com/h-enk/doks/discussions/543)
+- [Discussion #395: Getting search box to include blog posts](https://github.com/h-enk/doks/discussions/395)
+
+---
+
 <p align="center">
   <a href="https://getdoks.org/">
     <img alt="Doks" src="https://doks.netlify.app/doks.svg" width="60">
   </a>
 </p>
 
-<h1 align="center">
+<h2 align="center">
   Doks
 </h1>
 
