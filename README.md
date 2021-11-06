@@ -15,6 +15,8 @@ I initially had some trouble setting up more than one `docs` section from the or
 - [Pull request by theme author: Update for second docs tree](https://github.com/atwriter/new_doks_site/pull/1/commits/40e6eae81a8748645525afadf21b1759ce5f2c77)
 - [Discussion #543: Search function not working in second docs page](https://github.com/h-enk/doks/discussions/543)
 - [Discussion #395: Getting search box to include blog posts](https://github.com/h-enk/doks/discussions/395)
+- [Commit db375bb](https://github.com/xbufu/wiki/commit/db375bb641f08cc7a67f12c576ac6f6884044b59)
+- [Commit 4f03eb4](https://github.com/xbufu/wiki/commit/4f03eb4d821eacb609c1634e7d9c1a9875b80fbd)
 
 ---
 
