@@ -1,5 +1,5 @@
 ---
-title: "Domain GPO"
+title: "Domain GPOs"
 description: "Enumerating domain GPOs."
 lead: "Enumerating information about domain GPOs using the ActiveDirectory PowerShell module and PowerView."
 date: 2021-11-07T18:06:45+01:00
