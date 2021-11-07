@@ -9,7 +9,7 @@ images: []
 menu: 
   active_directory:
     parent: "domain_enumeration"
-weight: 40
+weight: 100
 toc: true
 ---
 
