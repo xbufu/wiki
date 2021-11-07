@@ -20,7 +20,7 @@ toc: true
 - Brute-force by sending only a single UDP frame to the KDC
 - Enumerate users on the domain from a wordlist
 
-## Exploitation
+## User Bruteforcing
 
 ```bash
 # Username enumeration

